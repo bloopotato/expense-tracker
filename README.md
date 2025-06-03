@@ -22,8 +22,6 @@ The UI is inspired by [Cashew](https://cashewapp.web.app/).
 
 ## How to run:
 
----
-
 1. Clone the project
 ```
 git clone https://github.com/bloopotato/expense-tracker.git
