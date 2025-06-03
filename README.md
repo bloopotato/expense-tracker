@@ -1,7 +1,5 @@
 # Expense Tracker
 
----
-
 <p align="center">
     <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white" alt="Spring Boot">
     <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React">
@@ -11,8 +9,6 @@
 </p>
 
 ## Description:
-
----
 
 A full-stack web application that allows users to track and manage their expenses and income effectively
 
