@@ -7,4 +7,6 @@ public class CategoryDto {
     Long id;
     String name;
     String colour;
+    String type;
+    int count;
 }

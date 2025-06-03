@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -35,16 +37,15 @@ public class UserService {
     @Autowired
     private SecurityUtil securityUtil;
 
-    public RegResponse register(User user) {
+    public String register(User user) {
+        Optional<User> userExists = userRepo.findByEmail(user.getEmail());
+        if (userExists.isPresent()) throw new RuntimeException("User already exists");
         user.setPassword(encoder.encode(user.getPassword()));
         userRepo.save(user);
         // Create default categories
         catService.createDefaultCategories(user);
         // Generate token
-        String token = jwtService.generateToken(user.getEmail());
-        // Map UserDto
-        UserDto userDto = userMapper.toUserDto(user);
-        return new RegResponse(token, userDto);
+        return jwtService.generateToken(user.getEmail());
     }
 
     public String login(LoginRequest loginRequest) {
@@ -56,13 +57,8 @@ public class UserService {
         throw new RuntimeException("Authentication failed");
     }
 
-    public UserDto getUserById(Long userId) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        String currentUserEmail = securityUtil.getCurrentUserEmail();
-        if (!user.getEmail().equals(currentUserEmail)) {
-            throw new RuntimeException("Unauthorized access");
-        }
+    public UserDto getUserData() {
+        User user = securityUtil.getUser();
         return userMapper.toUserDto(user);
     }
 

@@ -6,4 +6,5 @@ import lombok.Data;
 public class CategoryRequest {
     String name;
     String colour;
+    String type;
 }

@@ -4,16 +4,32 @@
 :root {
   font-family: 'Quicksand', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: 500;
+  background-color: #ffffff;
+  color: #054A91;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  --background: #ffffff;
+  --foreground: #054A91;
+  --primary: #3E7CB1;
+  --secondary: #81A4CD;
+  --tertiary: #DBE4EE;
+  --red: #D7263D;
+  --green: #38B000;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-red: var(--red);
+  --color-green: var(--green);
 }
 
 html {
@@ -24,56 +40,71 @@ body {
   font-size: 1.6rem;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+html, body {
+  height: 100%;
+  overflow: hidden;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-weight: bold;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  display: flex;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.button-welcome {
+  border: 0.3rem solid var(--foreground);
+  width: 30rem;
+  height: 4rem;
+  padding: 0 1rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  font-weight: bold;
+}
+
+.button-default {
+  border: 0.3rem solid #0c5446;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-weight: 600;
+}
+
+.button-coloured {
+  background: var(--foreground);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  color: var(--background);
+  align-items: center;
+  justify-content: center;
+}
+
+.input-default {
+  border: 0.2rem solid var(--foreground);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  outline: var(--foreground);
+}
+
+textarea {
+  border: 0.2rem solid var(--foreground);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  min-height: 10rem;
+  outline: var(--foreground);
+}
+
+.p-time {
+  background: var(--color-tertiary);
+  padding: 1rem;
+  border-radius: 1rem;
+  font-weight: bold;
+}
+
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-foreground) var(--color-background);
 }

@@ -4,11 +4,11 @@ import com.example.backend.dto.CategoryDto;
 import com.example.backend.dto.CategoryRequest;
 import com.example.backend.mappers.CategoryMapper;
 import com.example.backend.model.Category;
-import com.example.backend.model.Expense;
 import com.example.backend.model.User;
 import com.example.backend.repository.CategoryRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.util.SecurityUtil;
+import com.example.backend.util.TransactionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,12 +30,13 @@ public class CategoryService {
     @Autowired
     private SecurityUtil securityUtil;
 
-    private static final Map<String, String> DEFAULT_CATEGORIES = Map.of(
-            "Food", "#111111",
-            "Transport", "#222222",
-            "Entertainment", "#333333",
-            "Health", "#444444",
-            "Utilities", "#555555"
+    private static final Map<String, List<String>> DEFAULT_CATEGORIES = Map.of(
+            "Food", List.of("#eaad34", "EXPENSE"),
+            "Transport", List.of("#d35c54", "EXPENSE"),
+            "Entertainment", List.of("#6d9ff3", "EXPENSE"),
+            "Health", List.of("#7750c1", "EXPENSE"),
+            "Utilities", List.of("#83bc6b", "EXPENSE"),
+            "Income", List.of("#9941bb", "INCOME")
     );
 
     public CategoryDto createCategory(CategoryRequest request) {
@@ -44,6 +45,7 @@ public class CategoryService {
         if (exists) {
             throw new RuntimeException("Category already exists");
         }
+        request.setType(request.getType().toUpperCase());   // Auto capitalise to fit enum
         Category category = catMapper.requestToModel(request);
         category.setUser(user);
         Category savedCategory = catRepo.save(category);
@@ -51,10 +53,11 @@ public class CategoryService {
     }
 
     public void createDefaultCategories(User user) {
-        DEFAULT_CATEGORIES.forEach((name, colour) -> {
+        DEFAULT_CATEGORIES.forEach((name, list) -> {
             Category category = new Category();
             category.setName(name);
-            category.setColour(colour);
+            category.setColour(list.get(0));
+            category.setType(TransactionType.valueOf(list.get(1).toUpperCase()));
             category.setUser(user);
             catRepo.save(category);
         });
@@ -85,6 +88,7 @@ public class CategoryService {
         if (!category.getUser().equals(user)) {
             throw new RuntimeException("You do not have permission to update this category");
         }
+        request.setType(request.getType().toUpperCase());   // Auto capitalise to fit enum
         catMapper.updateModelFromRequest(request, category);
         Category savedCat = catRepo.save(category);
         return catMapper.toDto(savedCat);

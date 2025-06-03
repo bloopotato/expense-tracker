@@ -19,12 +19,18 @@ public class UserController {
     @PostMapping("/auth/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
-            RegResponse response = userService.register(user);
+            String token = userService.register(user);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(response);
+                    .body(Collections.singletonMap("token", token));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Collections.singletonMap("error", "Registration failed"));
+            String message = e.getMessage();
+            if (message.equals("User already exists")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("error", "You already have an account"));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("error", "Registration failed"));
+            }
         }
     }
 
@@ -53,25 +59,11 @@ public class UserController {
     }
 
     // Get user's own data
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
-        try {
-            UserDto user = userService.getUserById(userId);
-            return ResponseEntity.ok()
-                    .body(user);
-        } catch (Exception e) {
-            String message = e.getMessage();
-            if (message.equals("Unauthorized access")) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body(Collections.singletonMap("error", message));
-            } else if (message.equals("User not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Collections.singletonMap("error", message));
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Collections.singletonMap("error", "Unexpected error"));
-            }
-        }
+    @GetMapping("/users/profile")
+    public ResponseEntity<?> getUserById() {
+        UserDto user = userService.getUserData();
+        return ResponseEntity.ok()
+                .body(user);
     }
 
     // Update profile info
